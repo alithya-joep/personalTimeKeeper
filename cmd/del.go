@@ -24,6 +24,12 @@ var delCmd = &cobra.Command{
 		}
 		row, _ := cmd.Flags().GetInt("delete")
 		projects.Delete(row)
+		// store the projects back to file
+		err := projects.Store(projectfile)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
 	},
 }
 
