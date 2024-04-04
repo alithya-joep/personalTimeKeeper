@@ -38,6 +38,15 @@ func (p *Projects) Add(project string, task string, comment string) {
 	*p = append(*p, newProject)
 }
 
+func (p *Projects) Delete(index int) error {
+	ls := *p
+	if index < 0 || index >= len(ls) {
+		return errors.New("invaid index")
+	}
+	*p = append(ls[:index-1], ls[index:]...)
+	return nil
+}
+
 func (p *Projects) Load(filename string) error {
 	file, err := os.ReadFile(filename)
 	if err != nil {
@@ -82,7 +91,6 @@ func (p *Projects) Print() {
 			{Align: simpletable.AlignRight, Text: "Sun"},
 		},
 	}
-
 	var cells [][]*simpletable.Cell
 
 	for idx, item := range *p {
