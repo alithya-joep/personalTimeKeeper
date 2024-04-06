@@ -16,13 +16,13 @@ var addCmd = &cobra.Command{
 	Use:   "add new project",
 	Short: "add a new project to the list of projects",
 	Long: `add  new project task for the week. For example:
-	personalTimeKeeper add "new project"`,
+	ptt  add -p new project -t code review -c INT1577 -d 2024-04-07`,
 
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("add called")
 		projectname, _ := cmd.Flags().GetString("project")
 		task, _ := cmd.Flags().GetString("task")
 		comment, _ := cmd.Flags().GetString("comment")
+		date, _ := cmd.Flags().GetString("date")
 		// get refrence to the projects
 		projects := myutils.Projects{}
 
@@ -31,29 +31,22 @@ var addCmd = &cobra.Command{
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
 		}
-		projects.Add(projectname, task, comment)
+		projects.Add(projectname, task, comment, date)
 		// store the projects back to file
 		err := projects.Store(projectfile)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
 		}
+		projects.Print()
+		fmt.Println("add called")
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(addCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// addCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// addCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 	addCmd.Flags().StringP("project", "p", "", "project name")
 	addCmd.Flags().StringP("task", "t", "", "task code")
 	addCmd.Flags().StringP("comment", "c", "", "comment like 'ZZZ1234'")
+	addCmd.Flags().StringP("date", "d", "", "date for start of week.")
 }

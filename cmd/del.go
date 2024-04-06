@@ -30,6 +30,7 @@ var delCmd = &cobra.Command{
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
 		}
+		projects.Print()
 	},
 }
 

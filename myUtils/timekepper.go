@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"time"
 
 	"github.com/alexeyco/simpletable"
 )
@@ -16,7 +15,7 @@ type item struct {
 	State        string
 	Comment      string
 	Note         string
-	Date         time.Time
+	Date         string
 	HrsMonday    uint8
 	HrsTuesday   uint8
 	HrsWednesday uint8
@@ -28,12 +27,12 @@ type item struct {
 
 type Projects []item
 
-func (p *Projects) Add(project string, task string, comment string) {
+func (p *Projects) Add(project string, task string, comment string, date string) {
 	newProject := item{
 		Project: project,
 		Task:    task,
 		Comment: comment,
-		Date:    time.Now(),
+		Date:    date,
 	}
 	*p = append(*p, newProject)
 }
@@ -98,7 +97,7 @@ func (p *Projects) Print() {
 		task := item.Task
 		project := item.Project
 		comment := item.Comment
-		date := item.Date.Format("2006-01-02")
+		date := item.Date
 		mon := fmt.Sprintf("%d", item.HrsMonday)
 		tue := fmt.Sprintf("%d", item.HrsTuesday)
 		wed := fmt.Sprintf("%d", item.HrsWednesday)
