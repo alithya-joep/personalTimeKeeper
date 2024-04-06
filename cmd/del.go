@@ -15,6 +15,8 @@ var delCmd = &cobra.Command{
 	Long: `remove line by index
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
+		row, _ := cmd.Flags().GetInt("delete")
+
 		// get refrence to the projects
 		projects := myutils.Projects{}
 		// load the projects from fie
@@ -22,7 +24,7 @@ var delCmd = &cobra.Command{
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
 		}
-		row, _ := cmd.Flags().GetInt("delete")
+
 		projects.Delete(row)
 		// store the projects back to file
 		err := projects.Store(projectfile)
@@ -36,15 +38,5 @@ var delCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(delCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// delCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// delCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 	delCmd.Flags().IntP("delete", "r", 0, "delete a row")
 }

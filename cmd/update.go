@@ -1,40 +1,52 @@
 /*
 Copyright © 2024 NAME HERE <EMAIL ADDRESS>
-
 */
 package cmd
 
 import (
 	"fmt"
+	"os"
 
+	myutils "github.com/alithya-joep/personalTimeKeeper/myUtils"
 	"github.com/spf13/cobra"
 )
 
 // updateCmd represents the update command
 var updateCmd = &cobra.Command{
 	Use:   "update",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "update a rows hours",
+	Long: `select a row and update a value in the daily hours. For example:
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	ptt -r 3 -d mon -v 4`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("update called")
+		row, _ := cmd.Flags().GetInt("row")
+		newValue, _ := cmd.Flags().GetInt("newValue")
+		day, _ := cmd.Flags().GetString("day")
+
+		// get refrence to the projects
+		projects := myutils.Projects{}
+
+		// load the projects from fie
+		if err := projects.Load(projectfile); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
+
+		projects.Update(row, day, newValue)
+		// store the projects back to file
+		err := projects.Store(projectfile)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
+		projects.Print()
+
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(updateCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// updateCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// updateCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	updateCmd.Flags().IntP("row", "r", 0, "select row to update")
+	updateCmd.Flags().IntP("newValue", "v", 0, "new value for cell")
+	updateCmd.Flags().StringP("day", "d", "", "select day like thu")
 }
