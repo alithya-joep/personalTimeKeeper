@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	projectfile = "projects.json"
+	projectfile = "data/projects.json"
 )
 
 // rootCmd represents the base command when called without any subcommands
