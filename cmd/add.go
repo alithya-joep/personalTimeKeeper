@@ -23,6 +23,12 @@ var addCmd = &cobra.Command{
 		task, _ := cmd.Flags().GetString("task")
 		comment, _ := cmd.Flags().GetString("comment")
 		date, _ := cmd.Flags().GetString("date")
+
+		// validate the input
+		if projectname == "" || task == "" || comment == "" {
+			fmt.Fprintln(os.Stderr, "project, task, comment and date are required")
+			os.Exit(1)
+		}
 		// get refrence to the projects
 		projects := myutils.Projects{}
 

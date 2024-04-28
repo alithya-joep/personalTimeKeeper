@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/lipgloss/table"
@@ -32,11 +33,17 @@ type item struct {
 type Projects []item
 
 func (p *Projects) Add(project string, task string, comment string, date string) {
+
+	if date == "" {
+		date = time.Now().Format("2006-01-02")
+	}
+	startdate := StartOfWeek(date)
+
 	newProject := item{
 		Project: project,
 		Task:    task,
 		Comment: comment,
-		Date:    date,
+		Date:    startdate,
 	}
 	*p = append(*p, newProject)
 }
@@ -98,6 +105,24 @@ func (p *Projects) Load(filename string) error {
 	}
 	return nil
 }
+
+func StartOfWeek(dateIn string) string {
+	// Parse the input date
+
+	date, err := time.Parse("2006-01-02", dateIn)
+	if err != nil {
+		return "error"
+	}
+
+	// Find the number of days to subtract to get to the start of the week (Sunday)
+	offset := int(date.Weekday())
+
+	// Subtract the offset from the date to get the start of the week
+	startOfWeek := date.AddDate(0, 0, -offset)
+	// Return the start of the week as a formatted string
+	return startOfWeek.Format("2006-01-02")
+}
+
 func (p *Projects) Store(filename string) error {
 	file, err := json.Marshal(p)
 	if err != nil {

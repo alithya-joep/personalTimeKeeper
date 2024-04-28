@@ -22,11 +22,6 @@ var updateCmd = &cobra.Command{
 		row, _ := cmd.Flags().GetInt("row")
 		newValue, _ := cmd.Flags().GetUint8("newValue")
 		day, _ := cmd.Flags().GetString("day")
-
-		fmt.Println("Row:", row)
-		fmt.Println("New Value:", newValue)
-		fmt.Println("Day:", day)
-
 		// get refrence to the projects
 		projects := myutils.Projects{}
 
