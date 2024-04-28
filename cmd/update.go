@@ -20,8 +20,12 @@ var updateCmd = &cobra.Command{
 	ptt -r 3 -d mon -v 4`,
 	Run: func(cmd *cobra.Command, args []string) {
 		row, _ := cmd.Flags().GetInt("row")
-		newValue, _ := cmd.Flags().GetInt("newValue")
+		newValue, _ := cmd.Flags().GetUint8("newValue")
 		day, _ := cmd.Flags().GetString("day")
+
+		fmt.Println("Row:", row)
+		fmt.Println("New Value:", newValue)
+		fmt.Println("Day:", day)
 
 		// get refrence to the projects
 		projects := myutils.Projects{}
@@ -47,6 +51,6 @@ var updateCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(updateCmd)
 	updateCmd.Flags().IntP("row", "r", 0, "select row to update")
-	updateCmd.Flags().IntP("newValue", "v", 0, "new value for cell")
+	updateCmd.Flags().Uint8P("newValue", "v", 0, "new value for cell")
 	updateCmd.Flags().StringP("day", "d", "", "select day like thu")
 }

@@ -40,35 +40,36 @@ func (p *Projects) Add(project string, task string, comment string, date string)
 	}
 	*p = append(*p, newProject)
 }
-func (p *Projects) Update(index int, day string, newValue int) {
-
+func (p *Projects) Update(index int, day string, newValue uint8) error {
 	ls := *p
 	if index < 0 || index >= len(ls) {
 		fmt.Println("invalid index")
-		return
+		return nil
 	}
 	index = index - 1
 
 	switch day {
-	case "mon":
-		ls[index].HrsMonday = uint8(newValue)
-	case "tue":
-		ls[index].HrsTuesday = uint8(newValue)
-	case "wed":
-		ls[index].HrsWednesday = uint8(newValue)
-	case "thu":
-		ls[index].HrsThursday = uint8(newValue)
-	case "fri":
-		ls[index].HrsFriday = uint8(newValue)
-	case "sat":
-		ls[index].HrsSaturday = uint8(newValue)
-	case "sun":
-		ls[index].HrsSunday = uint8(newValue)
+	case "Mon":
+		ls[index].HrsMonday = newValue
+	case "Tue":
+		ls[index].HrsTuesday = newValue
+	case "Wed":
+		ls[index].HrsWednesday = newValue
+	case "Thu":
+		ls[index].HrsThursday = newValue
+	case "Fri":
+		ls[index].HrsFriday = newValue
+	case "Sat":
+		ls[index].HrsSaturday = newValue
+	case "Sun":
+		ls[index].HrsSunday = newValue
 	default:
 		fmt.Println("invalid day")
+		return nil
 	}
 
 	*p = ls
+	return nil
 
 }
 func (p *Projects) Delete(index int) error {
