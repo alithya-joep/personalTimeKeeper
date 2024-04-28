@@ -29,7 +29,8 @@ to quickly create a Cobra application.`,
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
 		}
-		projects.Print()
+		//projects.Print()
+		projects.PrintTea()
 
 	},
 }

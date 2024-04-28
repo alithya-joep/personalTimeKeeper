@@ -5,6 +5,10 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"strings"
+
+	"github.com/charmbracelet/lipgloss"
+	"github.com/charmbracelet/lipgloss/table"
 
 	"github.com/alexeyco/simpletable"
 )
@@ -100,6 +104,59 @@ func (p *Projects) Store(filename string) error {
 	}
 	return os.WriteFile(filename, file, 0644)
 }
+func (p *Projects) PrintTea() {
+	// Define some styles
+	// You can use lipgloss to style your tables
+	re := lipgloss.NewRenderer(os.Stdout)
+	baseStyle := re.NewStyle().Padding(0, 1)
+	headerStyle := baseStyle.Copy().Foreground(lipgloss.Color("99")).Bold(true)
+	//selectedStyle := baseStyle.Copy().Foreground(lipgloss.Color("#01BE85")).Background(lipgloss.Color("#00432F"))
+	headers := []string{"#", "project", "task", "comment", "date", "mon", "tue", "wed", "thu", "fri", "sat", "sun"}
+	CapitalizeHeaders := func(data []string) []string {
+		for i := range data {
+			data[i] = strings.ToUpper(data[i])
+		}
+		return data
+	}
+	data := [][]string{}
+	for idx, item := range *p {
+		data = append(data, []string{
+			fmt.Sprint(idx + 1),
+			item.Project,
+			item.Task,
+			item.Comment,
+			item.Date,
+			fmt.Sprint(item.HrsMonday),
+			fmt.Sprint(item.HrsTuesday),
+			fmt.Sprint(item.HrsWednesday),
+			fmt.Sprint(item.HrsThursday),
+			fmt.Sprint(item.HrsFriday),
+			fmt.Sprint(item.HrsSaturday),
+			fmt.Sprint(item.HrsSunday),
+		})
+	}
+
+	t := table.New().
+		Border(lipgloss.ThickBorder()).
+		BorderStyle(re.NewStyle().Foreground(lipgloss.Color("238"))).
+		Headers(CapitalizeHeaders(headers)...).
+		Width(80).
+		Rows(data...).
+		StyleFunc(func(row, col int) lipgloss.Style {
+			if row == 0 {
+				return headerStyle
+			}
+
+			even := row%2 == 0
+
+			if even {
+				return baseStyle.Copy().Foreground(lipgloss.Color("245"))
+			}
+			return baseStyle.Copy().Foreground(lipgloss.Color("252"))
+		})
+	fmt.Println(t)
+}
+
 func (p *Projects) Print() {
 
 	table := simpletable.New()
