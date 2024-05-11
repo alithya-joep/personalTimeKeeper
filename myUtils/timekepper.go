@@ -130,6 +130,8 @@ func (p *Projects) Store(filename string) error {
 	}
 	return os.WriteFile(filename, file, 0644)
 }
+
+
 func (p *Projects) PrintTea() {
 	// Define some styles
 	// You can use lipgloss to style your tables

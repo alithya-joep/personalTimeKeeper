@@ -16,7 +16,8 @@ var addCmd = &cobra.Command{
 	Use:   "add new project",
 	Short: "add a new project to the list of projects",
 	Long: `add  new project task for the week. For example:
-	ptt  add -p ny test ocriject -t code review -c INT1577 -d 2024-04-07`,
+	ptt  add -p my test project -t code review -c INT1577 -d 2024-04-07
+	date is optional and will default to the current date if not provided`,
 
 	Run: func(cmd *cobra.Command, args []string) {
 		projectname, _ := cmd.Flags().GetString("project")
